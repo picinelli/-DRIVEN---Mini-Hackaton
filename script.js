@@ -53,6 +53,7 @@ function pegarClima(latitude, longitude) {
 			carregarTemperaturaMaxMinAtual(resposta)
 			carregarTemperaturaAtual(resposta);
             carregarTemperaturaProximo7Dias(resposta.data.daily)
+			carregarNomeLocal(resposta)
 			console.log(resposta);
 		});
 }
@@ -112,12 +113,10 @@ function criarFooterDiv(day){
         div.innerHTML = `
             <h3>${pegarDiaDaSemana(index)}</h3>
             <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="">
-            <h3>${day[index].temp.min} ${day[index].temp.max}</h3>
+            <h3>${Math.floor(day[index].temp.min)} ${Math.floor(day[index].temp.max)}</h3>
         `
 		footer.appendChild(div)
-        carregarFooter(div);
     }
-	
 }
 
 pegarLocalizacao();
