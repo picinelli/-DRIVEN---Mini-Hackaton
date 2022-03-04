@@ -2,3 +2,12 @@
 	display: flex;
 	flex-wrap: wrap;
 }
+*, *::after, *::before{
+	box-sizing: border-box;
+}
+
+body {
+	width: 100vw;
+	height: 100vh;
+	background: linear-gradient(to bottom, #5a4d9b, #5eb8ea);
+}
