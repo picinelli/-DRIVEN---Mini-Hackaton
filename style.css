@@ -2,11 +2,14 @@
 	display: flex;
 	flex-wrap: wrap;
 }
-*, *::after, *::before{
+*,
+*::after,
+*::before {
 	box-sizing: border-box;
 }
 
 body {
+	font-family: 'League Spartan', sans-serif;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -21,9 +24,8 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-family: 'League Spartan', sans-serif;
 	font-size: 40px;
-	color: #FFFFFF;
+	color: #ffffff;
 }
 /* Estilos para o Main */
 .dados-clima-atual {
@@ -45,10 +47,12 @@ body {
 	font-size: 20px;
 	padding-right: 25px;
 }
+
 /*Estilos para o footer*/
 footer {
 	color: white;
-	font-weight: 600;
+	font-weight: 500;
+	font-size: 1.1rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -58,13 +62,22 @@ footer {
 	position: relative;
 }
 
-footer > div {
+footer > .row {
 	display: flex;
-	gap: 17vw;
 	line-height: 5vh;
 }
 
-footer > div > img{
+footer > .row > img {
 	height: 40px;
 	width: 40px;
+}
+
+footer .dia_semana {
+	position: absolute;
+	left: 5%;
+}
+
+footer .temperatura {
+	position: absolute;
+	right: 5%;
 }
