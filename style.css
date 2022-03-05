@@ -48,6 +48,14 @@ body {
 	padding-right: 25px;
 }
 
+.figura_clima {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 3rem;
+	color: white;
+}
 /*Estilos para o footer*/
 footer {
 	color: white;
