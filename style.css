@@ -59,6 +59,33 @@ body {
 	color: white;
 }
 /*Estilos para o footer*/
+
+#hourly_weather {
+	width: 80%;
+	height: 20vh;
+	background-color: #aecce8;
+	margin: 3vh 0;
+	border-radius: 30px;
+	display: flex;
+	padding: 0 8vw;
+	justify-content: space-between;
+}
+
+#hourly_weather div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #7078b6;
+	padding-top: 1.5vh;
+}
+
+#hourly_weather img {
+	filter: grayscale(100%);
+	opacity: 0.5;
+	aspect-ratio: 1/1;
+	width: 2.5rem;
+}
+
 footer {
 	color: white;
 	font-weight: 500;

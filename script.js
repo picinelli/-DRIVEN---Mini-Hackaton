@@ -1,8 +1,9 @@
 const body = document.querySelector('body');
 const weekday = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
+const URL_ICONE = 'http://openweathermap.org/img/wn/';
 
-// const pack1 = 'https://lottiefiles.com/user/263075';
-// const pack2 = 'https://lottiefiles.com/user/26177';
+const d = new Date();
+const hour = d.getHours();
 
 const animacoesDia = {
 	limpo: 'https://assets5.lottiefiles.com/temp/lf20_Stdaec.json',
@@ -51,13 +52,14 @@ const iconesNoite = {
 function pegarClima(latitude, longitude) {
 	axios
 		.post(
-			`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&exclude=hourly&appid=a731ceeacd30fa68e8839d76a9e0084c`
+			`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=a731ceeacd30fa68e8839d76a9e0084c`
 		)
 		.then((resposta) => {
 			console.log(resposta);
 			carregarAnimacaoPrincipal(resposta);
 			carregarTemperaturaMaxMinAtual(resposta);
 			carregarTemperaturaAtual(resposta);
+			carregarClimaHoras(resposta);
 			carregarTemperaturaProximo7Dias(resposta.data.daily);
 			carregarNomeLocal(resposta);
 		});
@@ -90,29 +92,11 @@ function carregarTemperaturaMaxMinAtual(resposta) {
 }
 
 function pegarDiaDaSemana(i) {
-	const d = new Date();
 	return weekday[(d.getDay() + i) % 7];
-}
-
-function pegarLocalizacaoFooter() {
-	navigator.geolocation.getCurrentPosition((position) => {
-		pegarClima(position.coords.latitude, position.coords.longitude);
-	});
 }
 
 function carregarTemperaturaProximo7Dias(temperaturaDaily) {
 	criarFooterDiv(temperaturaDaily);
-}
-
-function pegarClimaFooter(latitude, longitude) {
-	axios
-		.post(
-			`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&exclude=hourly&appid=a731ceeacd30fa68e8839d76a9e0084c`
-		)
-		.then((resposta) => {
-			carregarTemperaturaAtualFooter(resposta);
-			console.log(resposta);
-		});
 }
 
 function criarFooterDiv(day) {
@@ -123,9 +107,9 @@ function criarFooterDiv(day) {
 		div.classList.add('row');
 		div.innerHTML = `
             <h3 class="dia_semana">${pegarDiaDaSemana(index)}</h3>
-            <img src="http://openweathermap.org/img/wn/${pegarIconeClimaDoDia(
-				climaAtual.toString().toLowerCase()
-			)}" alt="">
+            <img src="${URL_ICONE}${pegarIconeClimaDoDia(
+			climaAtual.toString().toLowerCase()
+		)}" alt="">
             <h3 class="temperatura">${Math.floor(day[index].temp.min)}º ${Math.floor(
 			day[index].temp.max
 		)}º
@@ -142,13 +126,35 @@ function carregarAnimacaoPrincipal(resposta) {
 	const url = pegarAnimacaoClimaAtual(climaAtual.toString().toLowerCase());
 
 	figuraClima.innerHTML = `
-		<lottie-player src="${url}" background="transparent" speed="1"style="width: 250px; height: 250px; padding-left: 20px" loop autoplay></lottie-player>		
+		<lottie-player src="${url}" background="transparent" speed="1"style="width: 200px; height: 200px; padding-left: 20px" loop autoplay></lottie-player>		
+	`;
+}
+
+function carregarClimaHoras(resposta) {
+	const climaHoras = resposta.data.hourly;
+	console.log(climaHoras);
+	const secaoClimaHoras = document.getElementById('hourly_weather');
+
+	let icone = pegarIconeClimaDoDia(climaHoras[0].weather[0].main.toString().toLowerCase());
+
+	secaoClimaHoras.innerHTML = criarElementoClimaHora('Now', icone);
+
+	for (let i = 1; i < 6; i++) {
+		icone = pegarIconeClimaDoDia(climaHoras[i].weather[0].main.toString().toLowerCase());
+		secaoClimaHoras.innerHTML += criarElementoClimaHora((hour + i) % 24, icone);
+	}
+}
+
+function criarElementoClimaHora(hora, icone) {
+	return `
+		<div>
+			<h4>${hora}</h4>
+			<img src="${URL_ICONE}${icone}" alt="" />
+		</div>
 	`;
 }
 
 function pegarAnimacaoClimaAtual(climaAtual) {
-	const d = new Date();
-	const hour = d.getHours();
 	const isDia = hour >= 5 && hour <= 19;
 
 	const animacoes = isDia ? animacoesDia : animacoesNoite;
@@ -174,8 +180,6 @@ function pegarAnimacaoClimaAtual(climaAtual) {
 }
 
 function pegarIconeClimaDoDia(clima) {
-	const d = new Date();
-	const hour = d.getHours();
 	const isDia = hour >= 5 && hour <= 19;
 
 	const icones = isDia ? iconesDia : iconesNoite;
