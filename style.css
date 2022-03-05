@@ -11,15 +11,38 @@ body {
 	display: flex;
 	justify-content: center;
 	background: linear-gradient(45deg, #331350, #4033bd);
+	position: relative;
 }
 
 .container {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	width: 100vw;
 	height: 100vh;
 	background: linear-gradient(to bottom, #5a4d9b, #5eb8ea);
+}
+
+/*Estilos para icones*/
+
+ion-icon {
+	position: absolute;
+	color: white;
+	font-size: 2rem;
+	right: 5%;
+}
+ion-icon:hover {
+	transform: scale(1.1);
+	cursor: pointer;
+}
+
+#search_icon {
+	top: 12%;
+}
+
+#location_icon {
+	top: 4%;
 }
 
 /* Estilos para Header */
@@ -90,6 +113,10 @@ body {
 	width: 2.5rem;
 }
 
+#hourly_weather.hidden {
+	display: none;
+}
+
 footer {
 	color: white;
 	font-weight: 500;
@@ -121,6 +148,25 @@ footer .dia_semana {
 footer .temperatura {
 	position: absolute;
 	right: 5%;
+}
+
+/*Estilos Loading*/
+#loading_screen {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border-radius: 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 3rem;
+	color: white;
+	background: linear-gradient(to bottom, #5a4d9b, #5eb8ea);
+	z-index: 2;
+}
+
+#loading_screen.hidden {
+	display: none;
 }
 
 /*Estilos desktop*/

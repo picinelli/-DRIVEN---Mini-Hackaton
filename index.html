@@ -17,30 +17,39 @@
 	</head>
 	<body>
 		<div class="container">
+			<div id="loading_screen" class="hidden">
+				<lottie-player
+					src="https://assets2.lottiefiles.com/packages/lf20_pnul69ob.json"
+					background="transparent"
+					speed="2.5"
+					style="width: 400px; height: 400px; padding-left: 20px"
+					loop
+					autoplay
+				></lottie-player>
+				<h1>Loading</h1>
+				<lottie-player
+					src="https://assets7.lottiefiles.com/packages/lf20_x62chJ.json"
+					background="transparent"
+					speed="1"
+					style="width: 200px; height: 150px; padding-left: 20px"
+					loop
+					autoplay
+				></lottie-player>
+			</div>
+
 			<header class="nome_cidade">
 				<p class="nome_cidade_string"></p>
 			</header>
 
+			<ion-icon
+				id="location_icon"
+				onclick="pegarLocalizacaoAtual();"
+				name="location-outline"
+			></ion-icon>
+			<ion-icon id="search_icon" name="search-outline"></ion-icon>
+
 			<main class="dados-clima-atual">
-				<section class="figura_clima">
-					<lottie-player
-						src="https://assets2.lottiefiles.com/packages/lf20_pnul69ob.json"
-						background="transparent"
-						speed="2.5"
-						style="width: 400px; height: 400px; padding-left: 20px"
-						loop
-						autoplay
-					></lottie-player>
-					<h1>Loading</h1>
-					<lottie-player
-						src="https://assets7.lottiefiles.com/packages/lf20_x62chJ.json"
-						background="transparent"
-						speed="1"
-						style="width: 200px; height: 150px; padding-left: 20px"
-						loop
-						autoplay
-					></lottie-player>
-				</section>
+				<section class="figura_clima"></section>
 				<section class="numero-clima">
 					<span class="temperatura-atual">
 						<p class="temperatura-atual_numero"></p>
@@ -51,11 +60,19 @@
 				</section>
 				<section class=""></section>
 			</main>
-			<section id="hourly_weather"></section>
+			<section id="hourly_weather" class="hidden"></section>
 			<footer></footer>
 		</div>
 
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script
+			type="module"
+			src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"
+		></script>
+		<script
+			nomodule=""
+			src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"
+		></script>
 		<script src="script.js"></script>
 	</body>
 </html>

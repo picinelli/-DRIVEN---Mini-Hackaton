@@ -1,6 +1,7 @@
 const body = document.querySelector('body');
 const weekday = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
 const URL_ICONE = 'http://openweathermap.org/img/wn/';
+const loadingScreen = document.getElementById('loading_screen');
 
 const d = new Date();
 const hour = d.getHours();
@@ -50,6 +51,7 @@ const iconesNoite = {
 };
 
 function pegarClima(latitude, longitude) {
+	toggleLoadingScreen();
 	axios
 		.post(
 			`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=a731ceeacd30fa68e8839d76a9e0084c`
@@ -62,10 +64,11 @@ function pegarClima(latitude, longitude) {
 			carregarClimaHoras(resposta);
 			carregarTemperaturaProximo7Dias(resposta.data.daily);
 			carregarNomeLocal(resposta);
+			toggleLoadingScreen();
 		});
 }
 
-function pegarLocalizacao() {
+function pegarLocalizacaoAtual() {
 	navigator.geolocation.getCurrentPosition((position) => {
 		pegarClima(position.coords.latitude, position.coords.longitude);
 	});
@@ -101,6 +104,7 @@ function carregarTemperaturaProximo7Dias(temperaturaDaily) {
 
 function criarFooterDiv(day) {
 	const footer = document.querySelector('footer');
+	footer.innerHTML = '';
 	for (let index = 1; index < 5; index++) {
 		const climaAtual = day[index].weather[0].main;
 		const div = document.createElement('div');
@@ -134,6 +138,7 @@ function carregarClimaHoras(resposta) {
 	const climaHoras = resposta.data.hourly;
 	console.log(climaHoras);
 	const secaoClimaHoras = document.getElementById('hourly_weather');
+	secaoClimaHoras.classList.remove('hidden');
 
 	let icone = pegarIconeClimaDoDia(climaHoras[0].weather[0].main.toString().toLowerCase());
 
@@ -204,4 +209,9 @@ function pegarIconeClimaDoDia(clima) {
 	}
 }
 
-pegarLocalizacao();
+function toggleLoadingScreen() {
+	loadingScreen.classList.toggle('hidden');
+}
+
+// pegarLocalizacaoAtual();
+pegarClima(41, -74);
