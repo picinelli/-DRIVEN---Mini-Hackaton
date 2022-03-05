@@ -4,18 +4,25 @@ const weekday = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'S
 // const pack1 = 'https://lottiefiles.com/user/263075';
 // const pack2 = 'https://lottiefiles.com/user/26177';
 
-// function createAnimationComponent(description) {
-// 	const url = weatherURLs[description];
-// 	return `
-// <lottie-player
-// 			src="${url}"
-// 			background="transparent"
-// 			speed="1"
-// 			style="width: 300px; height: 300px"
-// 			loop
-// 			autoplay
-// ></lottie-player>`;
-// }
+const animacoesDia = {
+	limpo: 'https://assets5.lottiefiles.com/temp/lf20_Stdaec.json',
+	chuva: 'https://assets3.lottiefiles.com/packages/lf20_bco9p3ju.json',
+	chuvaRaios: 'https://assets1.lottiefiles.com/temp/lf20_XkF78Y.json',
+	nublado: 'https://assets9.lottiefiles.com/temp/lf20_kOfPKE.json',
+	parcialmenteChuvoso: 'https://assets6.lottiefiles.com/temp/lf20_rpC1Rd.json',
+	neve: 'https://assets9.lottiefiles.com/private_files/lf30_w5u9xr3a.json',
+	generico: 'https://assets9.lottiefiles.com/packages/lf20_iombyzfq.json',
+};
+
+const animacoesNoite = {
+	limpo: 'https://assets4.lottiefiles.com/private_files/lf30_iugenddu.json',
+	chuva: 'https://assets4.lottiefiles.com/private_files/lf30_jr9yjlcf.json',
+	chuvaRaios: 'https://assets2.lottiefiles.com/private_files/lf30_22gtsfnq.json',
+	nublado: 'https://assets8.lottiefiles.com/private_files/lf30_nx7kptft.json',
+	parcialmenteChuvoso: 'https://assets5.lottiefiles.com/temp/lf20_I5XMi9.json',
+	neve: 'https://assets6.lottiefiles.com/private_files/lf30_9bptg8sh.json',
+	generico: 'https://assets4.lottiefiles.com/private_files/lf30_iugenddu.json',
+};
 
 function pegarClima(latitude, longitude) {
 	axios
@@ -23,11 +30,12 @@ function pegarClima(latitude, longitude) {
 			`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&exclude=hourly&appid=a731ceeacd30fa68e8839d76a9e0084c`
 		)
 		.then((resposta) => {
+			console.log(resposta);
+			carregarAnimacaoPrincipal(resposta);
 			carregarTemperaturaMaxMinAtual(resposta);
 			carregarTemperaturaAtual(resposta);
 			carregarTemperaturaProximo7Dias(resposta.data.daily);
 			carregarNomeLocal(resposta);
-			console.log(resposta);
 		});
 }
 
@@ -97,6 +105,44 @@ function criarFooterDiv(day) {
 			</h3>
         `;
 		footer.appendChild(div);
+	}
+}
+
+function carregarAnimacaoPrincipal(resposta) {
+	const figuraClima = document.querySelector('.figura_clima');
+
+	const climaAtual = resposta.data.current.weather[0].main;
+	const url = pegarAnimacaoClimaAtual(climaAtual.toString().toLowerCase());
+
+	figuraClima.innerHTML = `
+		<lottie-player src="${url}" background="transparent" speed="1"style="width: 250px; height: 250px; padding-left: 20px" loopautoplay></lottie-player>
+	`;
+}
+
+function pegarAnimacaoClimaAtual(climaAtual) {
+	const d = new Date();
+	const hour = d.getHours();
+	const isDia = hour >= 5 && hour <= 19;
+
+	const animacoes = isDia ? animacoesDia : animacoesNoite;
+
+	switch (climaAtual) {
+		case 'clear':
+			return animacoes.limpo;
+		case 'rain':
+			return animacoes.chuva;
+		case 'mist':
+			return animacoes.nublado;
+		case 'clouds':
+			return animacoes.nublado;
+		case 'thunderstorm':
+			return animacoes.chuvaRaios;
+		case 'drizzle':
+			return animacoes.parcialmenteChuvoso;
+		case 'snow':
+			return animacoes.neve;
+		default:
+			return animacoes.generico;
 	}
 }
 
