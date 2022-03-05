@@ -8,7 +8,8 @@ const animacoesDia = {
 	limpo: 'https://assets5.lottiefiles.com/temp/lf20_Stdaec.json',
 	chuva: 'https://assets3.lottiefiles.com/packages/lf20_bco9p3ju.json',
 	chuvaRaios: 'https://assets1.lottiefiles.com/temp/lf20_XkF78Y.json',
-	nublado: 'https://assets9.lottiefiles.com/temp/lf20_kOfPKE.json',
+	nublado: 'https://assets2.lottiefiles.com/temp/lf20_VAmWRg.json',
+	neblina: 'https://assets9.lottiefiles.com/temp/lf20_kOfPKE.json',
 	parcialmenteChuvoso: 'https://assets6.lottiefiles.com/temp/lf20_rpC1Rd.json',
 	neve: 'https://assets9.lottiefiles.com/private_files/lf30_w5u9xr3a.json',
 	generico: 'https://assets9.lottiefiles.com/packages/lf20_iombyzfq.json',
@@ -19,9 +20,32 @@ const animacoesNoite = {
 	chuva: 'https://assets4.lottiefiles.com/private_files/lf30_jr9yjlcf.json',
 	chuvaRaios: 'https://assets2.lottiefiles.com/private_files/lf30_22gtsfnq.json',
 	nublado: 'https://assets8.lottiefiles.com/private_files/lf30_nx7kptft.json',
+	neblina: 'https://assets6.lottiefiles.com/private_files/lf30_qqhrsksk.json',
 	parcialmenteChuvoso: 'https://assets5.lottiefiles.com/temp/lf20_I5XMi9.json',
 	neve: 'https://assets6.lottiefiles.com/private_files/lf30_9bptg8sh.json',
 	generico: 'https://assets4.lottiefiles.com/private_files/lf30_iugenddu.json',
+};
+
+const iconesDia = {
+	limpo: '01d.png',
+	chuva: '09d.png',
+	chuvaRaios: '11d.png',
+	nublado: '04d.png',
+	neblina: '50d.png',
+	parcialmenteChuvoso: '10d.png',
+	neve: '13d.png',
+	generico: '02d.png',
+};
+
+const iconesNoite = {
+	limpo: '01n.png',
+	chuva: '09n.png',
+	chuvaRaios: '11n.png',
+	nublado: '04n.png',
+	neblina: '50n.png',
+	parcialmenteChuvoso: '10n.png',
+	neve: '13n.png',
+	generico: '02n.png',
 };
 
 function pegarClima(latitude, longitude) {
@@ -94,11 +118,14 @@ function pegarClimaFooter(latitude, longitude) {
 function criarFooterDiv(day) {
 	const footer = document.querySelector('footer');
 	for (let index = 1; index < 5; index++) {
+		const climaAtual = day[index].weather[0].main;
 		const div = document.createElement('div');
 		div.classList.add('row');
 		div.innerHTML = `
             <h3 class="dia_semana">${pegarDiaDaSemana(index)}</h3>
-            <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="">
+            <img src="http://openweathermap.org/img/wn/${pegarIconeClimaDoDia(
+				climaAtual.toString().toLowerCase()
+			)}" alt="">
             <h3 class="temperatura">${Math.floor(day[index].temp.min)}º ${Math.floor(
 			day[index].temp.max
 		)}º
@@ -115,7 +142,7 @@ function carregarAnimacaoPrincipal(resposta) {
 	const url = pegarAnimacaoClimaAtual(climaAtual.toString().toLowerCase());
 
 	figuraClima.innerHTML = `
-		<lottie-player src="${url}" background="transparent" speed="1"style="width: 250px; height: 250px; padding-left: 20px" loopautoplay></lottie-player>
+		<lottie-player src="${url}" background="transparent" speed="1"style="width: 250px; height: 250px; padding-left: 20px" loop autoplay></lottie-player>		
 	`;
 }
 
@@ -132,7 +159,7 @@ function pegarAnimacaoClimaAtual(climaAtual) {
 		case 'rain':
 			return animacoes.chuva;
 		case 'mist':
-			return animacoes.nublado;
+			return animacoes.neblina;
 		case 'clouds':
 			return animacoes.nublado;
 		case 'thunderstorm':
@@ -143,6 +170,33 @@ function pegarAnimacaoClimaAtual(climaAtual) {
 			return animacoes.neve;
 		default:
 			return animacoes.generico;
+	}
+}
+
+function pegarIconeClimaDoDia(clima) {
+	const d = new Date();
+	const hour = d.getHours();
+	const isDia = hour >= 5 && hour <= 19;
+
+	const icones = isDia ? iconesDia : iconesNoite;
+
+	switch (clima) {
+		case 'clear':
+			return icones.limpo;
+		case 'rain':
+			return icones.chuva;
+		case 'mist':
+			return icones.neblina;
+		case 'clouds':
+			return icones.nublado;
+		case 'thunderstorm':
+			return icones.chuvaRaios;
+		case 'drizzle':
+			return icones.parcialmenteChuvoso;
+		case 'snow':
+			return icones.neve;
+		default:
+			return icones.generico;
 	}
 }
 
