@@ -7,7 +7,7 @@ const d = new Date();
 const hour = d.getHours();
 
 const animacoesDia = {
-	limpo: 'https://assets5.lottiefiles.com/temp/lf20_Stdaec.json',
+	limpo: 'https://assets1.lottiefiles.com/packages/lf20_xlky4kvh.json',
 	chuva: 'https://assets3.lottiefiles.com/packages/lf20_bco9p3ju.json',
 	chuvaRaios: 'https://assets1.lottiefiles.com/temp/lf20_XkF78Y.json',
 	nublado: 'https://assets2.lottiefiles.com/temp/lf20_VAmWRg.json',
