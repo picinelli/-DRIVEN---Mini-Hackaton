@@ -74,7 +74,7 @@ function pegarLocalizacao() {
 function carregarNomeLocal(resposta) {
 	let nomeLocal = resposta.data.timezone;
 	let nomeLocalHTML = document.querySelector('.nome_cidade_string');
-	nomeLocalHTML.innerHTML = `${nomeLocal}`;
+	nomeLocalHTML.innerHTML = `${nomeLocal.split('/')[1].replace('_', ' ')}`;
 }
 
 function carregarTemperaturaAtual(resposta) {

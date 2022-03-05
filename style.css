@@ -8,6 +8,9 @@ body {
 	font-family: 'League Spartan', sans-serif;
 	width: 100vw;
 	height: 100vh;
+	display: flex;
+	justify-content: center;
+	background: linear-gradient(45deg, #331350, #4033bd);
 }
 
 .container {
@@ -28,6 +31,7 @@ body {
 	align-items: center;
 	font-size: 40px;
 	color: #ffffff;
+	padding-top: 3vh;
 }
 /* Estilos para o Main */
 .dados-clima-atual {
@@ -65,7 +69,7 @@ body {
 	height: 20vh;
 	background-color: #aecce8;
 	margin: 3vh 0;
-	border-radius: 30px;
+	border-radius: 50px;
 	display: flex;
 	padding: 0 8vw;
 	justify-content: space-between;
@@ -117,4 +121,13 @@ footer .dia_semana {
 footer .temperatura {
 	position: absolute;
 	right: 5%;
+}
+
+/*Estilos desktop*/
+@media (min-width: 614px) {
+	.container {
+		width: 614px;
+		border-radius: 40px;
+		border: 1px solid rgb(165, 165, 165);
+	}
 }
