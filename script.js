@@ -2,6 +2,7 @@ const body = document.querySelector('body');
 const weekday = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
 const URL_ICONE = 'http://openweathermap.org/img/wn/';
 const loadingScreen = document.getElementById('loading_screen');
+const searchScreen = document.getElementById('search_screen');
 
 const d = new Date();
 const hour = d.getHours();
@@ -52,20 +53,24 @@ const iconesNoite = {
 
 function pegarClima(latitude, longitude) {
 	toggleLoadingScreen();
-	axios
-		.post(
-			`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=a731ceeacd30fa68e8839d76a9e0084c`
-		)
-		.then((resposta) => {
-			console.log(resposta);
-			carregarAnimacaoPrincipal(resposta);
-			carregarTemperaturaMaxMinAtual(resposta);
-			carregarTemperaturaAtual(resposta);
-			carregarClimaHoras(resposta);
-			carregarTemperaturaProximo7Dias(resposta.data.daily);
-			carregarNomeLocal(resposta);
-			toggleLoadingScreen();
-		});
+
+	const promise = axios.post(
+		`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=pt_br&appid=a731ceeacd30fa68e8839d76a9e0084c`
+	);
+
+	promise.then((resposta) => {
+		carregarAnimacaoPrincipal(resposta.data.current.weather);
+		carregarTemperaturaMaxMinAtual(
+			resposta.data.daily[0].temp.min,
+			resposta.data.daily[0].temp.max
+		);
+		carregarTemperaturaAtual(resposta.data.current.temp);
+		carregarClimaHoras(resposta);
+		carregarTemperaturaProximo7Dias(resposta.data.daily);
+		carregarNomeLocal(resposta);
+	});
+	promise.catch((err) => console.log(err.response));
+	promise.finally(toggleLoadingScreen);
 }
 
 function pegarLocalizacaoAtual() {
@@ -80,18 +85,15 @@ function carregarNomeLocal(resposta) {
 	nomeLocalHTML.innerHTML = `${nomeLocal.split('/')[1].replace('_', ' ')}`;
 }
 
-function carregarTemperaturaAtual(resposta) {
+function carregarTemperaturaAtual(temp) {
 	let temperaturaAtual = document.querySelector('.temperatura-atual_numero');
-	let temperaturaNumero = resposta.data.current.temp;
+	let temperaturaNumero = temp;
 	temperaturaAtual.innerHTML = `${Math.round(temperaturaNumero)}°`;
 }
 
-function carregarTemperaturaMaxMinAtual(resposta) {
+function carregarTemperaturaMaxMinAtual(tempMin, tempMax) {
 	let temperaturaMaxMinHTML = document.querySelector('.maximo-minimo_numero');
-	let temperaturaNumero = resposta.data.current.temp;
-	temperaturaMaxMinHTML.innerHTML = `${Math.round(temperaturaNumero) - 3}º / ${
-		Math.round(temperaturaNumero) + 3
-	}º`;
+	temperaturaMaxMinHTML.innerHTML = `${Math.round(tempMin)}º / ${Math.round(tempMax)}º`;
 }
 
 function pegarDiaDaSemana(i) {
@@ -123,10 +125,10 @@ function criarFooterDiv(day) {
 	}
 }
 
-function carregarAnimacaoPrincipal(resposta) {
+function carregarAnimacaoPrincipal(weather) {
 	const figuraClima = document.querySelector('.figura_clima');
 
-	const climaAtual = resposta.data.current.weather[0].main;
+	const climaAtual = weather[0].main;
 	const url = pegarAnimacaoClimaAtual(climaAtual.toString().toLowerCase());
 
 	figuraClima.innerHTML = `
@@ -136,7 +138,6 @@ function carregarAnimacaoPrincipal(resposta) {
 
 function carregarClimaHoras(resposta) {
 	const climaHoras = resposta.data.hourly;
-	console.log(climaHoras);
 	const secaoClimaHoras = document.getElementById('hourly_weather');
 	secaoClimaHoras.classList.remove('hidden');
 
@@ -209,8 +210,36 @@ function pegarIconeClimaDoDia(clima) {
 	}
 }
 
+function pesquisarCidade() {
+	const cidadeInput = document.getElementById('cidade_input');
+	const cidade = cidadeInput.value;
+
+	toggleLoadingScreen();
+	const promise = axios.get(
+		`https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&appid=a731ceeacd30fa68e8839d76a9e0084c`
+	);
+
+	promise.then((resposta) => {
+		carregarAnimacaoPrincipal(resposta.data.weather);
+		carregarTemperaturaMaxMinAtual(resposta.data.main.temp_min, resposta.data.main.temp_max);
+		carregarTemperaturaAtual(resposta.data.main.temp);
+
+		//esse request nao retorna as informacoes de dias e horas :( teria que fazer outro request, talvez ate precise de outra api key
+		// carregarClimaHoras(resposta);
+		// carregarTemperaturaProximo7Dias(resposta.data.daily);
+		let nomeLocalHTML = document.querySelector('.nome_cidade_string');
+		nomeLocalHTML.innerHTML = cidade;
+	});
+	promise.catch((err) => console.log(err.response));
+	promise.finally(toggleLoadingScreen);
+}
+
 function toggleLoadingScreen() {
 	loadingScreen.classList.toggle('hidden');
+}
+
+function toggleSearchScreen() {
+	searchScreen.classList.toggle('hidden');
 }
 
 // pegarLocalizacaoAtual();

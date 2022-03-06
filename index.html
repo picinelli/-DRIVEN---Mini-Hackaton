@@ -37,6 +37,20 @@
 				></lottie-player>
 			</div>
 
+			<div id="search_screen" class="hidden">
+				<input id="cidade_input" type="text" placeholder="Procure uma cidade" />
+				<ion-icon
+					id="search_icon"
+					onclick="pesquisarCidade();toggleSearchScreen()"
+					name="search-outline"
+				></ion-icon>
+				<ion-icon
+					id="close_search_screen"
+					name="close-outline"
+					onclick="toggleSearchScreen()"
+				></ion-icon>
+			</div>
+
 			<header class="nome_cidade">
 				<p class="nome_cidade_string"></p>
 			</header>
@@ -46,7 +60,11 @@
 				onclick="pegarLocalizacaoAtual();"
 				name="location-outline"
 			></ion-icon>
-			<ion-icon id="search_icon" name="search-outline"></ion-icon>
+			<ion-icon
+				id="search_icon"
+				onclick="toggleSearchScreen()"
+				name="search-outline"
+			></ion-icon>
 
 			<main class="dados-clima-atual">
 				<section class="figura_clima"></section>
